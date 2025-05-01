@@ -775,4 +775,17 @@ const CrapsGame = () => {
           <div className="mb-6 bg-muted p-4 rounded-lg">
             <h3 className="font-bold mb-2">Your Stats</h3>
             <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm">
-              <div>Rolls Made: <span className="font-bold">{gameStats.rollsMade}
+              <div>Rolls Made: <span className="font-bold">{gameStats.rollsMade}</span></div>
+              <div>Pass Line Wins: <span className="font-bold">{gameStats.passLineWins}</span></div>
+              <div>Biggest Win: <span className="font-bold gold-text">{gameStats.biggestWin}</span></div>
+              <div>Wagered: <span className="font-bold">{gameStats.totalWagered}</span></div>
+              <div>Total Won: <span className="font-bold gold-text">{gameStats.totalWon}</span></div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default CrapsGame;
