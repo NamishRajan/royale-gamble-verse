@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
 import MiniGames from "./pages/MiniGames";
 import CashOut from "./pages/CashOut";
+import CasinoGames from "./pages/CasinoGames";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -23,6 +24,7 @@ const App = () => (
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/minigames" element={<MiniGames />} />
           <Route path="/cashout" element={<CashOut />} />
+          <Route path="/games/:gameType" element={<CasinoGames />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
