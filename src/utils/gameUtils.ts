@@ -1,3 +1,4 @@
+
 // Game types
 export type GameType = 'slots' | 'blackjack' | 'roulette' | 'poker' | 'craps';
 export type MiniGameType = 'quiz' | 'memory' | 'reaction';
@@ -62,11 +63,11 @@ export const CASINO_GAMES: Game[] = [
   },
   {
     id: 'poker-texas',
-    name: 'Texas Hold\'em',
+    name: 'Video Poker',
     type: 'poker',
-    description: 'Classic poker variant with community cards',
-    minBet: 20,
-    maxBet: 2000,
+    description: 'Draw cards and make the best poker hand',
+    minBet: 1,
+    maxBet: 100,
     image: '/placeholder.svg',
     popularity: 80
   },
@@ -123,6 +124,36 @@ export const MINI_GAMES: MiniGame[] = [
     duration: 30,
     image: '/placeholder.svg',
     difficulty: 'easy'
+  },
+  {
+    id: 'quiz-advanced',
+    name: 'Pro Gambling Quiz',
+    type: 'quiz',
+    description: 'Advanced questions about gambling odds and strategy',
+    rewardFactor: 2.5,
+    duration: 45,
+    image: '/placeholder.svg',
+    difficulty: 'hard'
+  },
+  {
+    id: 'memory-advanced',
+    name: 'Memory Challenge',
+    type: 'memory',
+    description: 'Find matching pairs in a larger, more complex grid',
+    rewardFactor: 3,
+    duration: 120,
+    image: '/placeholder.svg',
+    difficulty: 'hard'
+  },
+  {
+    id: 'reaction-pro',
+    name: 'Target Practice',
+    type: 'reaction',
+    description: 'Multiple targets with varying point values',
+    rewardFactor: 2,
+    duration: 40,
+    image: '/placeholder.svg',
+    difficulty: 'medium'
   }
 ];
 

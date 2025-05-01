@@ -1,10 +1,15 @@
 
+import { useState } from "react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { MiniGame, calculateReward } from "@/utils/gameUtils";
 import { useToast } from "@/components/ui/use-toast";
 import { updateCoins } from "@/utils/authUtils";
+import { Gamepad } from "lucide-react";
+import QuizMiniGame from "./minigames/QuizMiniGame";
+import MemoryMiniGame from "./minigames/MemoryMiniGame";
+import ReactionMiniGame from "./minigames/ReactionMiniGame";
 
 interface MiniGameCardProps {
   miniGame: MiniGame;
@@ -12,6 +17,9 @@ interface MiniGameCardProps {
 
 const MiniGameCard = ({ miniGame }: MiniGameCardProps) => {
   const { toast } = useToast();
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [gameComplete, setGameComplete] = useState(false);
+  const [finalScore, setFinalScore] = useState(0);
   
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
@@ -22,47 +30,53 @@ const MiniGameCard = ({ miniGame }: MiniGameCardProps) => {
     }
   };
   
-  const handlePlayMiniGame = () => {
-    // Simulate playing a mini game and earning a score
+  const handleGameStart = () => {
     toast({
       title: `Playing ${miniGame.name}`,
       description: `Game starting in 3...2...1...`,
     });
     
-    setTimeout(() => {
-      // Simulate random score between 50-100 for easy games
-      // 30-80 for medium games
-      // 10-60 for hard games
-      let minScore, maxScore;
-      
-      switch (miniGame.difficulty) {
-        case 'easy':
-          minScore = 50;
-          maxScore = 100;
-          break;
-        case 'medium':
-          minScore = 30;
-          maxScore = 80;
-          break;
-        case 'hard':
-          minScore = 10;
-          maxScore = 60;
-          break;
-        default:
-          minScore = 10;
-          maxScore = 100;
-      }
-      
-      const score = Math.floor(Math.random() * (maxScore - minScore + 1)) + minScore;
-      const reward = calculateReward(score, miniGame);
-      
-      updateCoins(reward);
-      
-      toast({
-        title: `${miniGame.name} Completed!`,
-        description: `Your score: ${score}. You earned ${reward} coins!`,
-      });
-    }, 1500);
+    setIsPlaying(true);
+    setGameComplete(false);
+  };
+  
+  const handleGameEnd = (score: number) => {
+    const reward = calculateReward(score, miniGame);
+    updateCoins(reward);
+    
+    setFinalScore(score);
+    setGameComplete(true);
+    setIsPlaying(false);
+    
+    toast({
+      title: `${miniGame.name} Completed!`,
+      description: `Your score: ${score}. You earned ${reward} coins!`,
+    });
+  };
+  
+  const renderMiniGame = () => {
+    switch (miniGame.type) {
+      case 'quiz':
+        return <QuizMiniGame 
+          difficulty={miniGame.difficulty}
+          onGameEnd={handleGameEnd}
+          duration={miniGame.duration}
+        />;
+      case 'memory':
+        return <MemoryMiniGame 
+          difficulty={miniGame.difficulty}
+          onGameEnd={handleGameEnd}
+          duration={miniGame.duration}
+        />;
+      case 'reaction':
+        return <ReactionMiniGame 
+          difficulty={miniGame.difficulty}
+          onGameEnd={handleGameEnd}
+          duration={miniGame.duration}
+        />;
+      default:
+        return <div>Game type not supported</div>;
+    }
   };
   
   return (
@@ -76,27 +90,53 @@ const MiniGameCard = ({ miniGame }: MiniGameCardProps) => {
         </div>
         <CardDescription>{miniGame.description}</CardDescription>
       </CardHeader>
+      
       <CardContent className="flex-grow pb-2">
-        <div className="relative h-40 mb-3 overflow-hidden rounded-md bg-gradient-to-br from-casino-primary to-black">
-          <img
-            src={miniGame.image}
-            alt={miniGame.name}
-            className="object-cover w-full h-full opacity-60"
-          />
-          <div className="absolute inset-0 flex items-center justify-center">
-            <span className="text-4xl font-bold text-casino-secondary drop-shadow-lg">
-              {miniGame.type.charAt(0).toUpperCase() + miniGame.type.slice(1)}
-            </span>
-          </div>
-        </div>
-        <div className="flex justify-between items-center text-sm">
-          <span>Duration: <span className="font-bold">{miniGame.duration}s</span></span>
-          <span>Reward: <span className="font-bold">x{miniGame.rewardFactor}</span></span>
-        </div>
+        {isPlaying ? (
+          renderMiniGame()
+        ) : (
+          <>
+            <div className="relative h-40 mb-3 overflow-hidden rounded-md bg-gradient-to-br from-casino-primary to-black">
+              <img
+                src={miniGame.image}
+                alt={miniGame.name}
+                className="object-cover w-full h-full opacity-60"
+              />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span className="text-4xl font-bold text-casino-secondary drop-shadow-lg">
+                  {miniGame.type.charAt(0).toUpperCase() + miniGame.type.slice(1)}
+                </span>
+              </div>
+            </div>
+            <div className="flex justify-between items-center text-sm">
+              <span>Duration: <span className="font-bold">{miniGame.duration}s</span></span>
+              <span>Reward: <span className="font-bold">x{miniGame.rewardFactor}</span></span>
+            </div>
+            
+            {gameComplete && (
+              <div className="mt-3 bg-muted p-2 rounded text-center">
+                <p className="text-sm">Last Score: <span className="font-bold">{finalScore}</span></p>
+                <p className="text-xs">Earned: <span className="font-bold gold-text">
+                  {calculateReward(finalScore, miniGame)} coins
+                </span></p>
+              </div>
+            )}
+          </>
+        )}
       </CardContent>
+      
       <CardFooter className="pt-2">
-        <Button onClick={handlePlayMiniGame} className="casino-button w-full">
-          Play Now
+        <Button 
+          onClick={handleGameStart} 
+          className="casino-button w-full"
+          disabled={isPlaying}
+        >
+          {isPlaying ? 'Playing...' : (
+            <>
+              <Gamepad className="mr-2 h-4 w-4" />
+              Play Now
+            </>
+          )}
         </Button>
       </CardFooter>
     </Card>
