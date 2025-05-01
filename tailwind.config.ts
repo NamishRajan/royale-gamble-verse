@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,6 +62,13 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				casino: {
+					primary: '#2D1B69',
+					secondary: '#FFD700',
+					accent: '#B22222',
+					dark: '#1A1A1A',
+					light: '#F5F5F5',
 				}
 			},
 			borderRadius: {
@@ -84,11 +92,38 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'card-glow': {
+					'0%, 100%': { 
+						boxShadow: '0 0 10px 2px rgba(255, 215, 0, 0.4)' 
+					},
+					'50%': { 
+						boxShadow: '0 0 20px 4px rgba(255, 215, 0, 0.6)' 
+					},
+				},
+				'neon-pulse': {
+					'0%, 100%': { 
+						textShadow: '0 0 5px #fff, 0 0 10px #fff, 0 0 15px #ff00de, 0 0 20px #ff00de' 
+					},
+					'50%': { 
+						textShadow: '0 0 10px #fff, 0 0 15px #fff, 0 0 20px #ff00de, 0 0 25px #ff00de' 
+					}
+				},
+				'coin-spin': {
+					'0%': { transform: 'rotateY(0deg)' },
+					'100%': { transform: 'rotateY(360deg)' }
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'card-glow': 'card-glow 2s infinite',
+				'neon-pulse': 'neon-pulse 1.5s infinite',
+				'coin-spin': 'coin-spin 1s ease-in-out'
+			},
+			backgroundImage: {
+				'casino-pattern': "url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1IiBoZWlnaHQ9IjUiPgo8cmVjdCB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSIjMWExYTFhIj48L3JlY3Q+CjxwYXRoIGQ9Ik0wIDVMNSAwWk02IDRMNCA2Wk0tMSAxTDEgLTFaIiBzdHJva2U9IiMyZDFiNjkiIHN0cm9rZS13aWR0aD0iMSI+PC9wYXRoPgo8L3N2Zz4=')",
+				'casino-gradient': "linear-gradient(to right bottom, #2D1B69, #1A1A1A)",
 			}
 		}
 	},
